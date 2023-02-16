@@ -3,7 +3,7 @@ import tkinter as tk
 
 import random
 
-def key_press_start_frame(event=None, root): #it checks what key is pressed
+def key_press_start_frame(event): #it checks what key is pressed
     key = event.char
     print(key, 'is pressed')
 
@@ -45,7 +45,7 @@ def GUI_start_frame():#game_start_frame
 
     quit_label = tk.Label(root, text = "Press Q to exit the game", font=("Times New Roman", 15), background="blue").place(x=335, y=640)
 
-    root.bind('<Key>', lambda root: key_press_start_frame(root))
+    root.bind('<Key>', key_press_start_frame)
 
     
     
