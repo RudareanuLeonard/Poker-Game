@@ -103,7 +103,7 @@ def human_vs_computer(): # human vs computer
 
 
     #FIRST CARD IMAGE
-    not_resized_img = Image.open("/home/vox/Desktop/Programming/PythonProgramming/Poker-Game/cards/default.png")
+    not_resized_img = Image.open("cards/default.png")
     img = not_resized_img.resize((55, 85))
     first_card = pil.ImageTk.PhotoImage(img)
 
