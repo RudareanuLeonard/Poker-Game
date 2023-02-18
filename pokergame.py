@@ -142,9 +142,8 @@ def human_vs_computer(): # human vs computer
         def shuflle_deck(self): #shuffle the deck
             random.shuffle(self)
         
-        def pop_a_card(self, card_to_pop): #pop a card after it been dealt
-            get_index = self.index(card_to_pop)
-            self.pop(get_index)
+        def pop_a_card(self, index): #pop a card after it been dealt
+            self.pop(index)
 
 
     
@@ -166,7 +165,28 @@ def human_vs_computer(): # human vs computer
     cards_dealt_frame.pack()
 
 
+
+    standard_deck = Deck() # we get the deck, so we can give each computer and user 2 random cards
+    standard_deck.shuflle_deck() #we shuffle the deck
+
+
+
     # COMPUTER FIRST CARD IMAGE
+
+    computer_first_card_index = random.randint(0, len(standard_deck) - 1)
+    computer_get_first_card = standard_deck[computer_first_card_index]
+    computer_first_card_tuple = text_of_image(computer_get_first_card.card_value, computer_get_first_card.card_suit)
+    print("Computer first card = " + (str)(computer_first_card_tuple))
+    standard_deck.pop(computer_first_card_index)
+
+    computer_second_card_index = random.randint(0, len(standard_deck) - 1)
+    computer_get_second_card = standard_deck[computer_second_card_index]
+    computer_second_card_tuple = text_of_image(computer_get_second_card.card_value, computer_get_second_card.card_suit)
+    print("Computer seoncd card = " + (str)(computer_second_card_tuple))
+
+    standard_deck.pop(computer_second_card_index)
+
+
     not_resized_img = Image.open("cards/default.png")
     img = not_resized_img.resize((55, 85))
     computer_first_card = pil.ImageTk.PhotoImage(img)
@@ -185,15 +205,15 @@ def human_vs_computer(): # human vs computer
 
 
     #USER FIRST CARD IMAGE
-    standard_deck = Deck() # we get the deck, so we can give to user 2 random cards
-    standard_deck.shuflle_deck() #we shuffle the deck
-    user_first_card_index = random.randint(0, 52) #we get the first card index ---- random
+    
+    user_first_card_index = random.randint(0, len(standard_deck) - 1) #we get the first card index ---- random
     # print("Index = " + (str)(user_first_card_index))
     user_get_first_card = standard_deck[user_first_card_index] # we get the card from the list of cards
 
     # print(text_of_image(user_get_first_card.card_value, user_get_first_card.card_suit))
 
     user_first_card_tuple = text_of_image(user_get_first_card.card_value, user_get_first_card.card_suit)
+    print("User first card = " + (str)(user_first_card_tuple))
     user_first_card_image_name = user_first_card_tuple[0] + " of " + user_first_card_tuple[1] + ".png" #we get the name of the image of the card that has been selected
 
     #we insert the first user card into the display
@@ -205,10 +225,15 @@ def human_vs_computer(): # human vs computer
     user_first_card_image.place(x=50, y=900)
 
 
+    #we pop the card
+    standard_deck.pop_a_card(user_first_card_index)
+
+
      #USER SECOND CARD IMAGE - SAME AS  #USER FIRST CARD IMAGE
-    user_second_card_index = random.randint(0, 52)
+    user_second_card_index = random.randint(0, len(standard_deck) - 1)
     user_get_second_card = standard_deck[user_second_card_index]
     user_second_card_tuple = text_of_image(user_get_second_card.card_value, user_get_second_card.card_suit)
+    print("User second card = " + (str)(user_second_card_tuple))
     user_second_card_image_name = user_second_card_tuple[0] + " of " + user_second_card_tuple[1] + ".png"
     not_resized_img = Image.open("cards/"+user_second_card_image_name)
     img = not_resized_img.resize((55,85))
@@ -216,6 +241,7 @@ def human_vs_computer(): # human vs computer
     user_second_card_image = tk.Label(image = user_second_card)
     user_second_card_image.image = user_second_card
     user_second_card_image.place(x=110, y=900)
+    standard_deck.pop_a_card(user_second_card_index)
 
 
 
