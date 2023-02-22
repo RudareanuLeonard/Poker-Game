@@ -5,26 +5,41 @@ import PIL as pil
 
 import random
 
-def key_press_start_frame(event): #it checks what key is pressed
-    key = event.char
-    print(key, 'is pressed')
 
-    if key in ('A', 'a'):
-        # enter vs AI window
-        pass
 
-    if key in ('U', 'u'):
-        # enter vs user window
-        pass
 
-    if key in ('R', 'r'):
-        # enter rules window
-        pass
+# def key_press_start_frame(event): #it checks what key is pressed
+#     key = event.char
+#     print(key, 'is pressed')
 
-    if key in ('Q', 'q'):
-        # exit window
-        pass
+#     if key in ('A', 'a'):
+#         # enter vs AI window
+#         pass
 
+#     if key in ('U', 'u'):
+#         # enter vs user window
+#         pass
+
+#     if key in ('R', 'r'):
+#         # enter rules window
+#         pass
+
+#     if key in ('Q', 'q'):
+#         # exit window
+#         pass
+
+
+user_chips_file = open("./user_chips.txt", 'r')
+user_chips = user_chips_file.readline()
+
+computer_chips_file = open("./computer_chips.txt", 'r')
+computer_chips = computer_chips_file.readline()
+print("user chips = " + user_chips)
+print("computer chips = " + computer_chips)
+
+user_or_computer_turn_file_read = open("./user_or_computer_turn.txt", 'r')
+user_or_computer_turn = user_or_computer_turn_file_read.readline()
+print(user_or_computer_turn) 
     
 
 
@@ -47,7 +62,7 @@ def GUI_start_frame():#game_start_frame
 
     quit_button = tk.Button(root, text = "Press Q to exit the game", font=("Times New Roman", 15), background="blue").place(x=335, y=640)
 
-    root.bind('<Key>', key_press_start_frame)
+    # root.bind('<Key>', key_press_start_frame)
     
 
     root.mainloop()
@@ -146,6 +161,28 @@ def human_vs_computer(): # human vs computer
             self.pop(index)
 
 
+
+
+    class Player():
+        def __init__(self, user_or_computer, userTurn): # true for user, false for computer;   true/false for myTurn also
+            self.user_or_computer = user_or_computer
+            self.chips = 800 #start chips
+            self.smallBlind = True # when we start, the player is small blind
+            self.check = False #player checked?
+            self.call = False #player called?
+            self.raise_chips = False #player raised
+            self.userTurn = userTurn #when we start => User has it TRUE and COMPUTER has it FALSE
+
+    user_player = Player(True, True)
+    computer_player = Player(False, False)
+
+    class Game(): #here are different scenarios of a game
+        def __init__(self):
+            self.still_runing = True
+            user_player.chips = user_player.chips + 10
+            print(user_player.chips)
+
+
     
     
     #GUI STARTS HERE
@@ -229,7 +266,7 @@ def human_vs_computer(): # human vs computer
     standard_deck.pop_a_card(user_first_card_index)
 
 
-     #USER SECOND CARD IMAGE - SAME AS  #USER FIRST CARD IMAGE
+    #USER SECOND CARD IMAGE - SAME AS  #USER FIRST CARD IMAGE
     user_second_card_index = random.randint(0, len(standard_deck) - 1)
     user_get_second_card = standard_deck[user_second_card_index]
     user_second_card_tuple = text_of_image(user_get_second_card.card_value, user_get_second_card.card_suit)
@@ -245,7 +282,47 @@ def human_vs_computer(): # human vs computer
 
 
 
+   
 
+    #FOLD BUTTON
+    def fold_button_pressed(button_press):
+        # Printing the text when a button is clicked
+        print(button_press)
+        root.destroy()
+    fold_button = tk.Button(root, text="FOLD",
+    command=lambda m="FOLD BUTTON PRESSED": fold_button_pressed(m))
+    
+    fold_button.place(x=604, y=950)
+
+
+
+    #CHECK BUTTON
+    def check_button_pressed(button_press):
+        # Printing the text when a button is clicked
+        print(button_press)
+        return True
+    check_button = tk.Button(root, text="CHECK",
+    command=lambda m="CHECK BUTTON PRESSED": check_button_pressed(m))
+    check_button.place(x=700, y=950)
+
+    #CALL BUTTON
+    call_button = tk.Button(root, text="CALL")
+    call_button.place(x=807, y=950)
+
+    #RAISE BUTTON
+    raise_button = tk.Button(root, text="RAISE")
+    raise_button.place(x=900, y=950)
+
+    print("CHECK = " + (str)(check_button))
+
+
+    #USER CHIPS:
+    user_chips_label = tk.Label(root, text = "User Chips = " + user_chips)
+    user_chips_label.place(x=300, y=950)
+
+    #COMPUTER CHIPS
+    computer_chips_label = tk.Label(root, text="Computer chips label = " + computer_chips)
+    computer_chips_label.place(x=300, y=50)
 
 
     # #Deck
@@ -265,9 +342,18 @@ def human_vs_computer(): # human vs computer
 
 def main(): #main
     # GUI_start_frame()
-    
-    human_vs_computer()
-    
+    int_user_chips = (int)(user_chips)
+    int_computer_chips = (int)(computer_chips)
+
+    turn = 0
+
+    while int_user_chips != 0 and int_computer_chips != 0:
+        human_vs_computer()
+        turn = turn + 1
+        user_or_computer_turn_file_write = open("./user_or_computer_turn.txt", 'w')
+        print("TURN = " + (str)(turn)) # 1 is USER turn' 0 is COMPUTER turn
+        user_or_computer_turn_file_write.write((str)(turn%2))
+        user_or_computer_turn_file_write.close()
 
 
 if __name__ == "__main__":
